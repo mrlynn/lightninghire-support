@@ -1,4 +1,4 @@
-name: Deploy Docusaurus site to GitHub Pages
+name: Deploy Next.js site to GitHub Pages
 
 on:
   # Runs on pushes to the main branch
@@ -28,17 +28,74 @@ jobs:
       
       - name: Build website
         run: |
-          npm run build
+          # Create a simple static site for GitHub Pages
+          mkdir -p out
+          
+          # Create a simple index.html
+          cat > out/index.html << 'EOL'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Lightning Hire Support</title>
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                line-height: 1.6;
+                color: #333;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+                text-align: center;
+              }
+              h1 {
+                color: #0070f3;
+              }
+              .logo {
+                max-width: 200px;
+                margin-bottom: 20px;
+              }
+              .card {
+                border: 1px solid #eaeaea;
+                border-radius: 10px;
+                padding: 20px;
+                margin: 20px 0;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+              }
+              .button {
+                display: inline-block;
+                background-color: #0070f3;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                text-decoration: none;
+                margin-top: 20px;
+                font-weight: bold;
+              }
+            </style>
+          </head>
+          <body>
+            <h1>Lightning Hire Support</h1>
+            <div class="card">
+              <h2>Welcome to Lightning Hire Support</h2>
+              <p>Our support portal is currently under maintenance.</p>
+              <p>Please visit our main site for more information.</p>
+              <a href="https://lightninghire.com" class="button">Visit Main Site</a>
+            </div>
+          </body>
+          </html>
+          EOL
+          
           # Make sure CNAME is preserved in the build output
-          if [ ! -f build/CNAME ]; then
-            echo "support.lightninghire.com" > build/CNAME
-          fi
+          echo "support.lightninghire.com" > out/CNAME
+          
           # Add .nojekyll file
-          touch build/.nojekyll
+          touch out/.nojekyll
       
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: gh-pages
-          folder: build
+          folder: out
           clean: true
