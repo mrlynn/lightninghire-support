@@ -1,37 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lightning Hire Support Portal
 
-## Getting Started
+![Lightning Hire Logo](public/images/logo.png)
 
-First, run the development server:
+A comprehensive support portal for the Lightning Hire platform, deployed at [support.lightninghire.com](https://support.lightninghire.com).
+
+## Overview
+
+Lightning Hire Support Portal is a Next.js application designed to provide a centralized knowledge base, documentation, and support resources for users of the Lightning Hire platform. It offers searchable articles, categorized content, and an AI-powered chatbot to assist users with their questions.
+
+## Features
+
+- **Knowledge Base**: Searchable articles organized by categories
+- **RAG-Powered Chatbot**: AI assistant backed by OpenAI and retrieval-augmented generation
+- **Admin Dashboard**: Content management for support staff
+- **User Authentication**: Seamless integration with the main Lightning Hire platform
+- **Responsive Design**: Optimized for desktop and mobile devices
+- **Vector Search**: Advanced semantic search capabilities for knowledge articles
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, Material UI 6
+- **Backend**: Next.js API routes
+- **Database**: MongoDB with Mongoose
+- **Authentication**: NextAuth.js
+- **AI Integration**: OpenAI API
+- **Content Rendering**: React Markdown
+
+## Prerequisites
+
+- Node.js 18.x or later
+- MongoDB (shared with the main Lightning Hire application)
+- OpenAI API key for RAG-powered chat and embeddings
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-organization/lightning-hire-support.git
+   cd lightning-hire-support
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file based on the provided example:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+4. Edit the `.env.local` file and fill in the required values:
+   - `MONGODB_URI`: Connection string to your MongoDB database
+   - `NEXTAUTH_URL`: The base URL of your support portal
+   - `NEXTAUTH_SECRET`: A secure random string for NextAuth.js
+   - `OPENAI_API_KEY`: Your OpenAI API key
+
+## Development
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Database Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The support portal shares the same MongoDB database as the main Lightning Hire application. It creates the following collections:
 
-## Learn More
+- `knowledgearticles`
+- `articlecategories`
+- `chatconversations`
+- `chatmessages`
 
-To learn more about Next.js, take a look at the following resources:
+For the RAG-powered chatbot, you need to set up a MongoDB vector search index:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Start the server, then access:
+GET http://localhost:3000/api/admin/setup/vector-index
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Initial Content Setup
 
-## Deploy on Vercel
+1. Log in with an admin account from the main Lightning Hire application
+2. Navigate to the admin dashboard at `/admin`
+3. Create categories and knowledge base articles
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# lightninghire-support
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Deploy to Vercel or another hosting platform:
+   ```bash
+   vercel --prod
+   ```
+
+3. Ensure all environment variables are set in your production environment
+
+## Project Structure
+
+- `/src/app` - Next.js app router pages and API routes
+- `/src/components` - Reusable React components
+- `/src/lib` - Utility functions and configuration
+- `/src/models` - Mongoose database models
+- `/src/services` - Business logic services
+- `/src/context` - React context providers
+- `/src/hooks` - Custom React hooks
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+Proprietary - All rights reserved
+
+## Additional Documentation
+
+- [Authentication Guide](AUTHENTICATION.md)
+- [Setup Guide](SETUP.md)
+- [Next Steps](NEXT_STEPS.md)
+
+---
+
+© 2024 Lightning Hire. All rights reserved.
