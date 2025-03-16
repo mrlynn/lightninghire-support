@@ -9,7 +9,7 @@ import { serializeDocument, serializeDocuments } from '@/lib/utils';
 import { notFound } from 'next/navigation';
 
 export const metadata = {
-  title: 'Edit Article - Lightning Hire Support',
+  title: 'Edit Article - LightningHire Support',
   description: 'Edit knowledge base article',
 };
 

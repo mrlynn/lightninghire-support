@@ -1,8 +1,8 @@
-# Lightning Hire Authentication System - Product Brief
+# LightningHire Authentication System - Product Brief
 
 ## Overview
 
-Lightning Hire's authentication system provides a secure, flexible multi-provider authentication mechanism that supports credential-based login, social authentication, and seamless account linking. Built on NextAuth.js with MongoDB integration, the system creates a unified user experience while maintaining strong security practices.
+LightningHire's authentication system provides a secure, flexible multi-provider authentication mechanism that supports credential-based login, social authentication, and seamless account linking. Built on NextAuth.js with MongoDB integration, the system creates a unified user experience while maintaining strong security practices.
 
 ## Authentication Features
 
@@ -143,7 +143,7 @@ The UI components handle form validation and authentication method selection, tr
 
 #### OAuth Authentication (Google/LinkedIn):
 1. User is redirected to provider's authentication page
-2. User grants permission to Lightning Hire
+2. User grants permission to LightningHire
 3. Provider returns authentication code
 4. System exchanges code for access token
 5. User profile information is retrieved from provider API
@@ -165,7 +165,7 @@ The account linking strategy focuses on email as the unique identifier:
 
 ### Session Management
 
-Lightning Hire uses JWT-based sessions with NextAuth:
+LightningHire uses JWT-based sessions with NextAuth:
 
 1. **Token Creation**:
    - JWT token contains user ID, name, email, subscription info, and role
@@ -215,4 +215,4 @@ The authentication system has been designed for extensibility. Planned future en
 
 ## Conclusion
 
-Lightning Hire's authentication system provides a robust foundation for user identity management with a focus on security, usability, and flexibility. By supporting multiple authentication providers and intelligent account linking, the system creates a seamless user experience while maintaining strong security practices. This system is designed to scale with the platform and accommodate future authentication needs.
+LightningHire's authentication system provides a robust foundation for user identity management with a focus on security, usability, and flexibility. By supporting multiple authentication providers and intelligent account linking, the system creates a seamless user experience while maintaining strong security practices. This system is designed to scale with the platform and accommodate future authentication needs.

@@ -73,7 +73,7 @@ const UserSchema = new Schema({
     }],
     recommendedContent: [{ type: Schema.Types.ObjectId, ref: 'Article' }]
   },
-  // Interaction history with main Lightning Hire system 
+  // Interaction history with main LightningHire system 
   mainAppActivity: {
     lastLogin: Date,
     productUsage: {

@@ -1,6 +1,6 @@
-# Lightning Hire Support Portal - Next Steps
+# LightningHire Support Portal - Next Steps
 
-This document outlines the next steps to complete the implementation of the Lightning Hire Support portal.
+This document outlines the next steps to complete the implementation of the LightningHire Support portal.
 
 ## Completed Components
 

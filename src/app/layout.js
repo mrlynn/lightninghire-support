@@ -9,8 +9,8 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Lightning Hire Support Center',
-  description: 'Knowledge base and support for Lightning Hire - AI-powered resume evaluation system',
+  title: 'LightningHire Support Center',
+  description: 'Knowledge base and support for LightningHire - AI-powered resume evaluation system',
 };
 
 export default function RootLayout({ children }) {

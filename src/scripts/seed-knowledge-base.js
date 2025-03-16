@@ -159,7 +159,7 @@ const categories = [
   {
     name: 'Getting Started',
     slug: 'getting-started',
-    description: 'Learn the basics of Lightning Hire and how to get started with the platform.',
+    description: 'Learn the basics of LightningHire and how to get started with the platform.',
     icon: 'PlayArrow',
     order: 1,
     isActive: true
@@ -167,7 +167,7 @@ const categories = [
   {
     name: 'Resume Parsing',
     slug: 'resume-parsing',
-    description: 'Learn how to use Lightning Hire\'s resume parsing capabilities.',
+    description: 'Learn how to use LightningHire\'s resume parsing capabilities.',
     icon: 'Description',
     order: 2,
     isActive: true
@@ -191,7 +191,7 @@ const categories = [
   {
     name: 'FAQs',
     slug: 'faqs',
-    description: 'Frequently asked questions about Lightning Hire.',
+    description: 'Frequently asked questions about LightningHire.',
     icon: 'Help',
     order: 5,
     isActive: true
@@ -202,16 +202,16 @@ const categories = [
 const articles = [
   // Getting Started
   {
-    title: 'Welcome to Lightning Hire',
+    title: 'Welcome to LightningHire',
     slug: 'welcome-to-lightning-hire',
-    shortDescription: 'An introduction to Lightning Hire and its key features.',
-    content: `# Welcome to Lightning Hire
+    shortDescription: 'An introduction to LightningHire and its key features.',
+    content: `# Welcome to LightningHire
 
-Lightning Hire is an AI-powered resume evaluation system designed to streamline your recruitment process. This guide will help you get started with the platform and understand its key features.
+LightningHire is an AI-powered resume evaluation system designed to streamline your recruitment process. This guide will help you get started with the platform and understand its key features.
 
-## What is Lightning Hire?
+## What is LightningHire?
 
-Lightning Hire uses advanced AI to analyze resumes and match candidates to your job requirements. The platform helps you:
+LightningHire uses advanced AI to analyze resumes and match candidates to your job requirements. The platform helps you:
 
 - Save time by automatically parsing and evaluating resumes
 - Find the best candidates based on skills and experience
@@ -222,7 +222,7 @@ Lightning Hire uses advanced AI to analyze resumes and match candidates to your 
 
 ### Resume Parsing
 
-Upload resumes in various formats (PDF, DOCX, etc.), and Lightning Hire will automatically extract key information:
+Upload resumes in various formats (PDF, DOCX, etc.), and LightningHire will automatically extract key information:
 
 - Contact details
 - Skills and expertise
@@ -257,7 +257,7 @@ Work with your team:
 3. [Upload and evaluate candidates](/articles/uploading-resumes)
 4. [Understand match scores](/articles/understanding-match-scores)
 
-We're excited to help you transform your recruitment process with Lightning Hire!`,
+We're excited to help you transform your recruitment process with LightningHire!`,
     category: 'Getting Started',
     tags: ['introduction', 'overview', 'getting started'],
     status: 'published',
@@ -266,14 +266,14 @@ We're excited to help you transform your recruitment process with Lightning Hire
   {
     title: 'Creating Your First Job Requisition',
     slug: 'creating-your-first-job-requisition',
-    shortDescription: 'Step-by-step guide to creating your first job requisition in Lightning Hire.',
+    shortDescription: 'Step-by-step guide to creating your first job requisition in LightningHire.',
     content: `# Creating Your First Job Requisition
 
-This guide will walk you through the process of creating your first job requisition in Lightning Hire.
+This guide will walk you through the process of creating your first job requisition in LightningHire.
 
 ## What is a Job Requisition?
 
-A job requisition is a detailed description of a job opening. It includes information about the role, required skills, experience level, and other criteria. Lightning Hire uses this information to evaluate candidates and provide match scores.
+A job requisition is a detailed description of a job opening. It includes information about the role, required skills, experience level, and other criteria. LightningHire uses this information to evaluate candidates and provide match scores.
 
 ## Step-by-Step Guide
 
@@ -310,7 +310,7 @@ In the "Requirements" section, specify:
 
 #### Pro Tip: Be Specific with Skills
 
-The more specific you are with required skills, the better Lightning Hire can match candidates. For example, instead of just "Programming," specify "Java," "Python," or other specific languages.
+The more specific you are with required skills, the better LightningHire can match candidates. For example, instead of just "Programming," specify "Java," "Python," or other specific languages.
 
 ### 5. Set Skill Weights
 
@@ -357,14 +357,14 @@ After creating your job requisition:
   {
     title: 'How Resume Parsing Works',
     slug: 'how-resume-parsing-works',
-    shortDescription: 'Understand how Lightning Hire parses and extracts information from resumes.',
-    content: `# How Resume Parsing Works in Lightning Hire
+    shortDescription: 'Understand how LightningHire parses and extracts information from resumes.',
+    content: `# How Resume Parsing Works in LightningHire
 
-Lightning Hire uses advanced AI and Natural Language Processing (NLP) to parse resumes with high accuracy. This article explains how our resume parsing technology works and what information it extracts.
+LightningHire uses advanced AI and Natural Language Processing (NLP) to parse resumes with high accuracy. This article explains how our resume parsing technology works and what information it extracts.
 
 ## The Resume Parsing Process
 
-When you upload a resume to Lightning Hire, it goes through several processing stages:
+When you upload a resume to LightningHire, it goes through several processing stages:
 
 ### 1. Document Extraction
 
@@ -453,7 +453,7 @@ In these cases, the system will extract as much information as possible and flag
 
 ## Handling Multiple Resumes
 
-Lightning Hire supports bulk processing of resumes:
+LightningHire Supports bulk processing of resumes:
 - Upload multiple files at once
 - Process resumes in batch via our API
 - Import from applicant tracking systems
@@ -478,7 +478,7 @@ To get the best results from our resume parser:
 ## Next Steps
 
 Learn how to:
-- [Upload resumes to Lightning Hire](/articles/uploading-resumes)
+- [Upload resumes to LightningHire](/articles/uploading-resumes)
 - [Review and edit parsed information](/articles/reviewing-parsed-resumes)
 - [Match candidates to job requirements](/articles/matching-candidates-to-jobs)`,
     category: 'Resume Parsing',
@@ -491,40 +491,40 @@ Learn how to:
   {
     title: 'Frequently Asked Questions',
     slug: 'frequently-asked-questions',
-    shortDescription: 'Answers to common questions about Lightning Hire.',
+    shortDescription: 'Answers to common questions about LightningHire.',
     content: `# Frequently Asked Questions
 
 ## General Questions
 
-### What is Lightning Hire?
-Lightning Hire is an AI-powered resume evaluation system that helps recruiters and hiring managers find the best candidates for their job openings. It uses advanced artificial intelligence to parse resumes, match candidates to job requirements, and provide objective evaluations.
+### What is LightningHire?
+LightningHire is an AI-powered resume evaluation system that helps recruiters and hiring managers find the best candidates for their job openings. It uses advanced artificial intelligence to parse resumes, match candidates to job requirements, and provide objective evaluations.
 
-### How does Lightning Hire work?
-Lightning Hire works by analyzing both job requirements and candidate resumes. It extracts key information from resumes, normalizes skills and experience data, and then compares candidates against job requirements to generate match scores and insights.
+### How does LightningHire work?
+LightningHire works by analyzing both job requirements and candidate resumes. It extracts key information from resumes, normalizes skills and experience data, and then compares candidates against job requirements to generate match scores and insights.
 
-### What file formats does Lightning Hire support?
-Lightning Hire supports all common resume formats:
+### What file formats does LightningHire Support?
+LightningHire Supports all common resume formats:
 - PDF (.pdf)
 - Microsoft Word (.docx, .doc)
 - Rich Text Format (.rtf)
 - Plain Text (.txt)
 - HTML (.html)
 
-### Is my data secure with Lightning Hire?
-Yes. Lightning Hire employs enterprise-grade security measures, including:
+### Is my data secure with LightningHire?
+Yes. LightningHire employs enterprise-grade security measures, including:
 - Data encryption in transit and at rest
 - Regular security audits
 - Role-based access controls
 - Compliance with data protection regulations
 - Secure cloud infrastructure
 
-### How accurate is Lightning Hire's AI?
+### How accurate is LightningHire's AI?
 Our AI has been trained on millions of resumes and job descriptions across various industries. It achieves an accuracy rate of over 95% for information extraction and 90% for candidate-job matching. We continuously improve our models based on user feedback and new data.
 
 ## Account & Billing
 
-### What plans does Lightning Hire offer?
-Lightning Hire offers three pricing tiers:
+### What plans does LightningHire offer?
+LightningHire offers three pricing tiers:
 - **Free**: For small teams (up to 2 active jobs, 50 candidates)
 - **Pro**: For growing companies ($49/month - 25 jobs, 500 candidates)
 - **Enterprise**: For larger organizations (Custom pricing - unlimited usage)
@@ -551,7 +551,7 @@ We accept major credit cards (Visa, Mastercard, American Express) and, for annua
 ## Features & Usage
 
 ### Can I import candidates in bulk?
-Yes, Lightning Hire supports bulk import of candidates via:
+Yes, LightningHire Supports bulk import of candidates via:
 - Multiple file upload
 - ZIP file containing multiple resumes
 - CSV import with resume file attachments
@@ -559,13 +559,13 @@ Yes, Lightning Hire supports bulk import of candidates via:
 
 ### How do I share candidate evaluations with my team?
 You can share candidate evaluations by:
-- Adding team members to your Lightning Hire account
+- Adding team members to your LightningHire account
 - Generating shareable evaluation reports
 - Exporting data to your ATS (with Enterprise plan)
 - Using our email sharing feature
 
-### Can Lightning Hire integrate with my ATS?
-Yes, Lightning Hire offers integrations with popular Applicant Tracking Systems:
+### Can LightningHire integrate with my ATS?
+Yes, LightningHire offers integrations with popular Applicant Tracking Systems:
 - Greenhouse
 - Lever
 - Workday
@@ -575,8 +575,8 @@ Yes, Lightning Hire offers integrations with popular Applicant Tracking Systems:
 
 Enterprise customers can also access our API for custom integrations.
 
-### What languages does Lightning Hire support?
-Lightning Hire currently supports resumes in:
+### What languages does LightningHire Support?
+LightningHire currently supports resumes in:
 - English
 - Spanish
 - French
@@ -604,11 +604,11 @@ Support options include:
 
 ## Technical Questions
 
-### Does Lightning Hire work on mobile devices?
-Yes, Lightning Hire has a responsive design that works on desktops, tablets, and mobile phones. We also offer mobile apps for iOS and Android.
+### Does LightningHire work on mobile devices?
+Yes, LightningHire has a responsive design that works on desktops, tablets, and mobile phones. We also offer mobile apps for iOS and Android.
 
 ### What browsers are supported?
-Lightning Hire supports:
+LightningHire Supports:
 - Chrome (recommended)
 - Firefox
 - Safari
@@ -617,7 +617,7 @@ Lightning Hire supports:
 
 We recommend using the latest version of any browser for optimal performance.
 
-### Can I export data from Lightning Hire?
+### Can I export data from LightningHire?
 Yes, you can export:
 - Candidate evaluations (PDF, CSV)
 - Match reports (PDF, CSV)
@@ -630,7 +630,7 @@ If you approach your plan limits, you'll receive a notification. If you exceed t
 - For candidate limits: You can purchase additional candidate credits or upgrade your plan
 
 ### Is an internet connection required?
-Yes, Lightning Hire is a cloud-based solution that requires an internet connection to access and use its features.
+Yes, LightningHire is a cloud-based solution that requires an internet connection to access and use its features.
 
 ## Still have questions?
 
@@ -645,16 +645,16 @@ If you didn't find the answer you were looking for:
   },
   // Pricing
   {
-    title: 'Lightning Hire Pricing Plans',
+    title: 'LightningHire Pricing Plans',
     slug: 'pricing-plans',
-    shortDescription: 'A complete guide to Lightning Hire\'s pricing plans, features, and subscription options.',
-    content: `# Lightning Hire Pricing Plans
+    shortDescription: 'A complete guide to LightningHire\'s pricing plans, features, and subscription options.',
+    content: `# LightningHire Pricing Plans
 
-This guide provides detailed information about Lightning Hire's pricing plans, features, and subscription options to help you choose the right plan for your organization.
+This guide provides detailed information about LightningHire's pricing plans, features, and subscription options to help you choose the right plan for your organization.
 
 ## Available Plans
 
-Lightning Hire offers three flexible pricing plans designed to meet the needs of different organizations, from small teams to large enterprises.
+LightningHire offers three flexible pricing plans designed to meet the needs of different organizations, from small teams to large enterprises.
 
 ### Free Plan
 
@@ -772,7 +772,7 @@ Downgrades take effect at the end of your current billing cycle.
 
 ### Payment Methods
 
-Lightning Hire accepts:
+LightningHire accepts:
 - All major credit cards (Visa, Mastercard, American Express, Discover)
 - Invoice payments for annual Enterprise plans
 

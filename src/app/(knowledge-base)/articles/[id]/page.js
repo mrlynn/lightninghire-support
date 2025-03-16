@@ -42,7 +42,7 @@ export async function generateMetadata({ params }) {
     }
 
     return {
-        title: `${article.title} | Lightning Hire Support`,
+        title: `${article.title} | LightningHire Support`,
         description: article.shortDescription,
         openGraph: {
             title: article.title,
@@ -165,7 +165,7 @@ export default async function ArticlePage({ params }) {
                     }}
                 >
                     <Typography variant="body2">
-                        {article.author ? `By ${article.author.name}` : 'By Lightning Hire Team'}
+                        {article.author ? `By ${article.author.name}` : 'By LightningHire Team'}
                     </Typography>
 
                     <Typography variant="body2">

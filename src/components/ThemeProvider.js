@@ -4,7 +4,7 @@
 import { createTheme, ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-// Create Lightning Hire theme matching the docs site
+// Create LightningHire theme matching the docs site
 const theme = createTheme({
   palette: {
     primary: {

@@ -273,7 +273,7 @@ export default function FloatingChatbot() {
                   Welcome to Bolt
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
-                  Ask me anything about using Lightning Hire for AI-powered resume evaluation.
+                  Ask me anything about using LightningHire for AI-powered resume evaluation.
                 </Typography>
               </Box>
             ) : (

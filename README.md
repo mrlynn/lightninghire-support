@@ -1,19 +1,19 @@
-# Lightning Hire Support Portal
+# LightningHire Support Portal
 
-![Lightning Hire Logo](public/images/logo.png)
+![LightningHire Logo](public/images/logo.png)
 
-A comprehensive support portal for the Lightning Hire platform, deployed at [support.lightninghire.com](https://support.lightninghire.com).
+A comprehensive support portal for the LightningHire platform, deployed at [support.lightninghire.com](https://support.lightninghire.com).
 
 ## Overview
 
-Lightning Hire Support Portal is a Next.js application designed to provide a centralized knowledge base, documentation, and support resources for users of the Lightning Hire platform. It offers searchable articles, categorized content, and an AI-powered chatbot to assist users with their questions.
+LightningHire Support Portal is a Next.js application designed to provide a centralized knowledge base, documentation, and support resources for users of the LightningHire platform. It offers searchable articles, categorized content, and an AI-powered chatbot to assist users with their questions.
 
 ## Features
 
 - **Knowledge Base**: Searchable articles organized by categories
 - **RAG-Powered Chatbot**: AI assistant backed by OpenAI and retrieval-augmented generation
 - **Admin Dashboard**: Content management for support staff
-- **User Authentication**: Seamless integration with the main Lightning Hire platform
+- **User Authentication**: Seamless integration with the main LightningHire platform
 - **Responsive Design**: Optimized for desktop and mobile devices
 - **Vector Search**: Advanced semantic search capabilities for knowledge articles
 
@@ -29,7 +29,7 @@ Lightning Hire Support Portal is a Next.js application designed to provide a cen
 ## Prerequisites
 
 - Node.js 18.x or later
-- MongoDB (shared with the main Lightning Hire application)
+- MongoDB (shared with the main LightningHire application)
 - OpenAI API key for RAG-powered chat and embeddings
 
 ## Installation
@@ -68,7 +68,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Database Setup
 
-The support portal shares the same MongoDB database as the main Lightning Hire application. It creates the following collections:
+The support portal shares the same MongoDB database as the main LightningHire application. It creates the following collections:
 
 - `knowledgearticles`
 - `articlecategories`
@@ -84,7 +84,7 @@ GET http://localhost:3000/api/admin/setup/vector-index
 
 ## Initial Content Setup
 
-1. Log in with an admin account from the main Lightning Hire application
+1. Log in with an admin account from the main LightningHire application
 2. Navigate to the admin dashboard at `/admin`
 3. Create categories and knowledge base articles
 
@@ -132,4 +132,4 @@ Proprietary - All rights reserved
 
 ---
 
-© 2024 Lightning Hire. All rights reserved.
+© 2024 LightningHire. All rights reserved.

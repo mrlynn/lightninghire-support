@@ -1,11 +1,11 @@
-# Lightning Hire Support Portal - Setup Guide
+# LightningHire Support Portal - Setup Guide
 
-This document outlines the steps to set up and run the Lightning Hire Support portal, which complements the main Lightning Hire application.
+This document outlines the steps to set up and run the LightningHire Support portal, which complements the main LightningHire application.
 
 ## Prerequisites
 
 - Node.js 18.x or later
-- MongoDB (shared with the main Lightning Hire application)
+- MongoDB (shared with the main LightningHire application)
 - OpenAI API key for RAG-powered chat and embeddings
 
 ## Installation
@@ -34,7 +34,7 @@ This document outlines the steps to set up and run the Lightning Hire Support po
 
 ## Database Setup
 
-The support portal shares the same MongoDB database as the main Lightning Hire application. It will create the following new collections:
+The support portal shares the same MongoDB database as the main LightningHire application. It will create the following new collections:
 
 - `knowledgearticles`
 - `articlecategories`
@@ -69,7 +69,7 @@ The support portal will be available at [http://localhost:3000](http://localhost
 
 ## Initial Content Setup
 
-1. Log in with an admin account from the main Lightning Hire application.
+1. Log in with an admin account from the main LightningHire application.
 
 2. Navigate to the admin dashboard at `/admin`.
 
@@ -84,7 +84,7 @@ The support portal will be available at [http://localhost:3000](http://localhost
 
 ## Deployment
 
-The support portal can be deployed alongside the main Lightning Hire application:
+The support portal can be deployed alongside the main LightningHire application:
 
 1. Build the application:
    ```bash
@@ -105,7 +105,7 @@ The support portal can be deployed alongside the main Lightning Hire application
 
 ## Integration with Main Application
 
-Add links to the support portal from the main Lightning Hire application:
+Add links to the support portal from the main LightningHire application:
 
 1. In the main app's navigation, add a "Support" link pointing to the support portal.
 
@@ -115,7 +115,7 @@ Add links to the support portal from the main Lightning Hire application:
 
 ### Custom Styling
 
-To match the main Lightning Hire application's styling:
+To match the main LightningHire application's styling:
 
 1. Update the theme configuration in `src/components/ThemeProvider.js`
 

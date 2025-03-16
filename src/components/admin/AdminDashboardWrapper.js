@@ -94,7 +94,7 @@ export default function AdminDashboardWrapper({ children }) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Lightning Hire Support Admin
+              LightningHire Support Admin
             </Typography>
           </Toolbar>
         </AppBar>

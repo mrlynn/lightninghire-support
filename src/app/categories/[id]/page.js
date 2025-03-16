@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
   }
   
   return {
-    title: `${category.name} | Lightning Hire Support`,
+    title: `${category.name} | LightningHire Support`,
     description: category.description || `Browse all ${category.name} articles`,
   };
 }

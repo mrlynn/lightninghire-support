@@ -21,8 +21,8 @@ import Link from 'next/link';
 
 // Generate metadata for the page
 export const metadata = {
-  title: 'Knowledge Base Articles | Lightning Hire Support',
-  description: 'Browse all Lightning Hire knowledge base articles and support documentation.'
+  title: 'Knowledge Base Articles | LightningHire Support',
+  description: 'Browse all LightningHire knowledge base articles and support documentation.'
 };
 
 export default async function ArticlesIndexPage() {

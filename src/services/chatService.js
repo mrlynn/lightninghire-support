@@ -220,7 +220,7 @@ export const chatService = {
       const openai = (await import('@/lib/openai')).default;
       
       // Create the prompt with user question and context
-      const systemPrompt = `You are a helpful support assistant for Lightning Hire, an AI-powered resume evaluation system. 
+      const systemPrompt = `You are a helpful support assistant for LightningHire, an AI-powered resume evaluation system. 
   Answer the user's question based on the context provided. 
   If the answer is not in the context, say that you don't have that information and suggest contacting support.
   

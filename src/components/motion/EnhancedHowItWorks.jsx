@@ -156,7 +156,7 @@ export default function EnhancedHowItWorks() {
             {activeStep === steps.length && (
               <Paper square elevation={0} sx={{ p: 3, borderRadius: 2 }}>
                 <Typography variant="body1" paragraph>
-                  All steps completed - you've seen how Lightning Hire works!
+                  All steps completed - you've seen how LightningHire works!
                 </Typography>
                 <Button onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
                   See Again

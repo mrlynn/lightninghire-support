@@ -66,7 +66,7 @@ export default function HomePage() {
               mb: 2
             }}
           >
-            Lightning Hire Support
+            LightningHire Support
           </Typography>
           
           <Typography 
@@ -139,7 +139,7 @@ export default function HomePage() {
                 
                 <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
                   {userProfile && userProfile.supportStats?.ticketsCreated > 0 ? (
-                    `You have ${userProfile.supportStats.ticketsCreated} support ticket${userProfile.supportStats.ticketsCreated > 1 ? 's' : ''} in our system. Our team is here to help you get the most out of Lightning Hire.`
+                    `You have ${userProfile.supportStats.ticketsCreated} support ticket${userProfile.supportStats.ticketsCreated > 1 ? 's' : ''} in our system. Our team is here to help you get the most out of LightningHire.`
                   ) : (
                     "Need help with anything? Our support team is ready to assist you with any questions you might have."
                   )}
@@ -342,7 +342,7 @@ export default function HomePage() {
                         Frequently Asked Questions
                       </Typography>
                       <Typography variant="body1" paragraph>
-                        Get immediate answers to common questions about using Lightning Hire.
+                        Get immediate answers to common questions about using LightningHire.
                       </Typography>
                       <Button 
                         component={Link}

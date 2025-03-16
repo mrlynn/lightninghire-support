@@ -169,7 +169,7 @@ export default function RegisterPage() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          Lightning Hire Support
+          LightningHire Support
         </Typography>
         <Typography variant="h5" component="h2" gutterBottom>
           Create an Account

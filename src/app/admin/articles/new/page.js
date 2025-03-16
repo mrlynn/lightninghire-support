@@ -8,7 +8,7 @@ import { serializeDocuments } from '@/lib/utils';
 import KnowledgeArticle from '@/models/KnowledgeArticle';
 
 export const metadata = {
-  title: 'Create New Article - Lightning Hire Support',
+  title: 'Create New Article - LightningHire Support',
   description: 'Create a new knowledge base article',
 };
 

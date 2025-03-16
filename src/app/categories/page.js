@@ -6,7 +6,7 @@ import { Category as CategoryIcon } from '@mui/icons-material';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Categories | Lightning Hire Support',
+  title: 'Categories | LightningHire Support',
   description: 'Browse all support article categories',
 };
 

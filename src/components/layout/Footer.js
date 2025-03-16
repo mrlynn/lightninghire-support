@@ -57,7 +57,7 @@ export default function Footer() {
                 </svg>
               </Box>
               <Typography variant="subtitle1" fontWeight={600}>
-                © {new Date().getFullYear()} Lightning Hire
+                © {new Date().getFullYear()} LightningHire
               </Typography>
             </Box>
           </Grid>

@@ -5,7 +5,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { connectToDatabase } from '@/lib/mongoose';
 import { compare } from 'bcrypt';
 
-// Import User model from main Lightning Hire app
+// Import User model from main LightningHire app
 // This assumes both apps share the same database
 let User;
 try {

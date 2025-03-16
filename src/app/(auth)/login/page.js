@@ -107,7 +107,7 @@ function LoginContent() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          Lightning Hire Support
+          LightningHire Support
         </Typography>
         <Typography variant="h5" component="h2" gutterBottom>
           Sign In

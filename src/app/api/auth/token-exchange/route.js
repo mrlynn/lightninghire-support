@@ -7,7 +7,7 @@ import { authOptions } from '@/lib/auth';
  * Token Exchange API Endpoint
  * 
  * This endpoint allows secure authentication token exchange between 
- * the main Lightning Hire application and the support portal.
+ * the main LightningHire application and the support portal.
  * 
  * It accepts a token from the other application, verifies it using the shared
  * NEXTAUTH_SECRET, and returns a new valid token for this application.

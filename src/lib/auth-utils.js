@@ -1,7 +1,7 @@
 /**
  * Authentication Utilities for Cross-Site Authentication
  * 
- * These utilities help manage authentication between the main Lightning Hire
+ * These utilities help manage authentication between the main LightningHire
  * application and the support portal.
  */
 
@@ -28,7 +28,7 @@ export const getSessionToken = async () => {
 };
 
 /**
- * Navigate to the main Lightning Hire application with authentication
+ * Navigate to the main LightningHire application with authentication
  * @param {string} destination - The path on the main app to navigate to
  */
 export const navigateToMainApp = async (destination = '/') => {
