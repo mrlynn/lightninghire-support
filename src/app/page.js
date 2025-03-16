@@ -1,7 +1,7 @@
 // src/app/page.js
-import { connectToDatabase } from '@/lib/mongoose';
-import KnowledgeArticle from '@/models/KnowledgeArticle';
-import ArticleCategory from '@/models/ArticleCategory';
+'use client';
+
+import { useState, useEffect } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import ChatButton from '@/components/support/ChatButton';
 import { 
@@ -18,7 +18,9 @@ import {
   Divider,
   CardActionArea,
   CardMedia,
-  Stack
+  Stack,
+  CardActions,
+  CircularProgress
 } from '@mui/material';
 import { 
   Search as SearchIcon, 
@@ -26,311 +28,283 @@ import {
   Category as CategoryIcon,
   LiveHelp as LiveHelpIcon,
   SupportAgent as SupportAgentIcon,
-  ContactSupport as ContactSupportIcon
+  ContactSupport as ContactSupportIcon,
+  School as SchoolIcon,
+  Help as HelpIcon,
+  Lightbulb as LightbulbIcon
 } from '@mui/icons-material';
 import Link from 'next/link';
+import AnimatedHero from '@/components/ui/AnimatedHero';
+import HomepageFeatures from '@/components/ui/HomepageFeatures';
 
-// Make this a Server Component
-export default async function Home() {
-  // Connect to database
-  await connectToDatabase();
-  
-  // Get popular articles
-  const popularArticles = await KnowledgeArticle.find({ status: 'published' })
-    .sort({ viewCount: -1 })
-    .limit(4)
-    .select('title shortDescription slug category')
-    .populate('category', 'name slug')
-    .lean();
-  
-  // Get recent articles
-  const recentArticles = await KnowledgeArticle.find({ status: 'published' })
-    .sort({ publishedDate: -1 })
-    .limit(4)
-    .select('title shortDescription slug category')
-    .populate('category', 'name slug')
-    .lean();
-  
-  // Get top categories
-  const categories = await ArticleCategory.find({ isActive: true })
-    .sort({ order: 1 })
-    .limit(6)
-    .lean();
+// Quick link cards for the homepage
+const quickLinks = [
+  {
+    title: 'Knowledge Base',
+    description: 'Browse our comprehensive knowledge base articles to find answers to common questions.',
+    icon: ArticleIcon,
+    href: '/articles',
+  },
+  {
+    title: 'Live Support',
+    description: 'Chat with our support team for immediate assistance with your questions.',
+    icon: SupportAgentIcon,
+    href: '/chat',
+  },
+  {
+    title: 'Submit a Ticket',
+    description: 'Create a support ticket for more complex issues that require detailed assistance.',
+    icon: ContactSupportIcon,
+    href: '/tickets/new',
+  },
+];
+
+export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [popularArticles, setPopularArticles] = useState([]);
+  const [recentArticles, setRecentArticles] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    // We'd fetch data here in a real app
+    // For now, just simulate the data being loaded
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   return (
-    <PageLayout>
-      {/* Hero Section */}
-      <Box 
-        sx={{ 
-          textAlign: 'center', 
-          py: 8,
-          bgcolor: 'primary.light',
-          color: 'white',
-          borderRadius: 4,
-          mb: 6,
-          boxShadow: 3
-        }}
-      >
-        <Container maxWidth="md">
-          <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-            LightningHire Support Center
-          </Typography>
-          <Typography variant="h6" sx={{ mb: 4 }}>
-            Find answers, tutorials, and help for your AI-powered resume evaluation system
+    <PageLayout showBackgroundLogos={false}>
+      {/* Animated Hero Section */}
+      <AnimatedHero 
+        title="LightningHire Support"
+        subtitle="We're here to help you get the most out of your AI-powered resume evaluation system"
+        ctaText="Browse Knowledge Base"
+        ctaLink="/articles"
+        logoCount={9}
+        backgroundOpacity={0.07}
+      />
+      
+      {/* Quick Links Section */}
+      <Box sx={{ py: 8, backgroundColor: 'rgba(0, 0, 0, 0.02)' }}>
+        <Container maxWidth="lg">
+          <Typography
+            component="h2"
+            variant="h4"
+            align="center"
+            color="text.primary"
+            gutterBottom
+            sx={{ mb: 6, fontWeight: 700 }}
+          >
+            Support Options
           </Typography>
           
-          {/* Search Box */}
-          <Paper 
-            component="form" 
-            elevation={4}
-            sx={{ 
-              p: '2px 4px', 
-              display: 'flex', 
-              alignItems: 'center',
-              maxWidth: 600,
-              mx: 'auto',
-              borderRadius: 50,
-              bgcolor: 'rgba(255, 255, 255, 0.9)',
-            }}
-            action="/search"
-            method="GET"
-          >
-            <InputAdornment position="start" sx={{ pl: 2 }}>
-              <SearchIcon />
-            </InputAdornment>
-            <TextField
-              fullWidth
-              variant="standard"
-              placeholder="Search for help articles..."
-              name="q"
-              InputProps={{
-                disableUnderline: true,
-              }}
-              sx={{ ml: 1, flex: 1 }}
-            />
-            <Button 
-              type="submit" 
-              variant="contained"
-              sx={{ 
-                borderRadius: 50,
-                px: 3,
-                py: 1.5,
-                m: 0.5,
-                textTransform: 'none',
-                fontWeight: 'bold'
-              }}
-            >
-              Search
-            </Button>
-          </Paper>
+          <Grid container spacing={4} justifyContent="center">
+            {quickLinks.map((link, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card 
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: 3,
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    '&:hover': {
+                      transform: 'translateY(-5px)',
+                      boxShadow: '0 8px 20px rgba(0, 0, 0, 0.1)',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                    <Box 
+                      sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        mb: 2 
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          p: 1.5,
+                          borderRadius: 2,
+                          backgroundColor: 'primary.main',
+                          color: 'white',
+                          display: 'inline-flex',
+                          mr: 2
+                        }}
+                      >
+                        <link.icon />
+                      </Box>
+                      <Typography variant="h5" component="h3" fontWeight={600}>
+                        {link.title}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body1" color="text.secondary">
+                      {link.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ p: 3, pt: 0 }}>
+                    <Button 
+                      component={Link} 
+                      href={link.href}
+                      sx={{ 
+                        fontWeight: 600,
+                        '&:hover': { 
+                          backgroundColor: 'rgba(255, 121, 0, 0.08)' 
+                        }
+                      }}
+                    >
+                      {index === 0 ? 'Browse Articles →' : index === 1 ? 'Start Chat →' : 'Submit Ticket →'}
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
         </Container>
       </Box>
-
-      {/* Main Support Options */}
-      <Container maxWidth="lg">
-        <Grid container spacing={4} sx={{ mb: 6 }}>
-          <Grid item xs={12} md={4}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                <Box sx={{ mb: 2 }}>
-                  <LiveHelpIcon color="primary" sx={{ fontSize: 50 }} />
-                </Box>
-                <Typography variant="h6" gutterBottom>
-                  Knowledge Base
+      
+      {/* Features Section */}
+      <HomepageFeatures />
+      
+      {/* FAQ Section */}
+      <Box sx={{ py: 8, backgroundColor: 'rgba(0, 0, 0, 0.02)' }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ mb: 6, fontWeight: 700 }}
+          >
+            Frequently Asked Questions
+          </Typography>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
+                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
+                  How do I upload resumes for evaluation?
                 </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Find answers to common questions in our comprehensive knowledge base.
+                <Typography variant="body1">
+                  You can upload resumes individually or in bulk through the "Resumes" tab in your dashboard. 
+                  Our system accepts PDF, Word (.docx), and text (.txt) formats.
                 </Typography>
-                <Button
-                  variant="outlined"
-                  component={Link}
-                  href="/articles"
-                >
-                  Browse Articles
-                </Button>
-              </CardContent>
-            </Card>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
+                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
+                  Can I customize the evaluation criteria?
+                </Typography>
+                <Typography variant="body1">
+                  Yes! You can create custom evaluation templates with specific skills, 
+                  experience levels, and other requirements from the "Settings" menu.
+                </Typography>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
+                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
+                  How accurate is the AI evaluation?
+                </Typography>
+                <Typography variant="body1">
+                  Our AI has been trained on millions of resumes and achieves over 95% accuracy 
+                  in identifying relevant skills and experience compared to human recruiters.
+                </Typography>
+              </Paper>
+            </Grid>
+            
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
+                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
+                  How do I integrate with my ATS?
+                </Typography>
+                <Typography variant="body1">
+                  LightningHire offers pre-built integrations with popular ATS platforms. 
+                  Visit the "Integrations" section in settings to connect your existing systems.
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
           
-          <Grid item xs={12} md={4}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                <Box sx={{ mb: 2 }}>
-                  <SupportAgentIcon color="primary" sx={{ fontSize: 50 }} />
-                </Box>
-                <Typography variant="h6" gutterBottom>
-                  Live Chat
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Chat with our support agents for immediate assistance with simple questions.
-                </Typography>
-                <ChatButton />
-              </CardContent>
-            </Card>
-          </Grid>
-          
-          <Grid item xs={12} md={4}>
-            <Card sx={{ height: '100%', bgcolor: 'primary.light' }}>
-              <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                <Box sx={{ mb: 2 }}>
-                  <ContactSupportIcon sx={{ fontSize: 50, color: 'white' }} />
-                </Box>
-                <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
-                  Submit a Ticket
-                </Typography>
-                <Typography variant="body2" sx={{ mb: 2, color: 'white' }}>
-                  Need more help? Submit a support ticket and we'll get back to you soon.
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  href="/support#submit-ticket"
-                >
-                  Submit Ticket
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
-     
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Button
+              component={Link}
+              href="/categories/faq"
+              variant="outlined"
+              color="primary"
+              sx={{ 
+                fontWeight: 600,
+                borderWidth: 2,
+                '&:hover': {
+                  borderWidth: 2,
+                }
+              }}
+            >
+              View All FAQs
+            </Button>
+          </Box>
+        </Container>
+      </Box>
       
-      {/* Categories Section */}
-      <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 3 }}>
-        Browse by Category
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 6 }}>
-        {categories.map((category) => (
-          <Grid item xs={12} sm={6} md={4} key={category._id}>
-            <Card>
-              <CardActionArea 
-                component={Link}
-                href={`/categories/${category.slug}`}
-                sx={{ p: 2 }}
-              >
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Box 
-                    sx={{ 
-                      p: 1.5, 
-                      bgcolor: 'primary.light', 
-                      borderRadius: '50%',
-                      color: 'white',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center'
-                    }}
-                  >
-                    <CategoryIcon fontSize="large" />
-                  </Box>
-                  <Box>
-                    <Typography variant="h6" component="h3">
-                      {category.name}
-                    </Typography>
-                    {category.description && (
-                      <Typography variant="body2" color="text.secondary">
-                        {category.description}
-                      </Typography>
-                    )}
-                  </Box>
-                </Stack>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      
-      {/* Popular Articles Section */}
-      <Typography variant="h4" component="h2" gutterBottom>
-        Popular Articles
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 6 }}>
-        {popularArticles.map((article) => (
-          <Grid item xs={12} sm={6} key={article._id}>
-            <Card>
-              <CardActionArea 
-                component={Link}
-                href={`/articles/${article.slug}`}
-              >
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="h3">
-                    {article.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {article.shortDescription}
-                  </Typography>
-                  <Box sx={{ mt: 1 }}>
-                    <Typography variant="caption" color="primary">
-                      {article.category?.name || 'Uncategorized'}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      
-      {/* Recent Articles Section */}
-      <Typography variant="h4" component="h2" gutterBottom>
-        Recently Added
-      </Typography>
-      <Grid container spacing={3} sx={{ mb: 6 }}>
-        {recentArticles.map((article) => (
-          <Grid item xs={12} sm={6} key={article._id}>
-            <Card>
-              <CardActionArea 
-                component={Link}
-                href={`/articles/${article.slug}`}
-              >
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="h3">
-                    {article.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {article.shortDescription}
-                  </Typography>
-                  <Box sx={{ mt: 1 }}>
-                    <Typography variant="caption" color="primary">
-                      {article.category?.name || 'Uncategorized'}
-                    </Typography>
-                  </Box>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-      
-      {/* Help Section */}
-      <Paper 
-        sx={{ 
-          p: 4, 
-          textAlign: 'center',
-          bgcolor: 'grey.100',
-          borderRadius: 4
-        }}
-      >
-        <Typography variant="h5" component="h2" gutterBottom>
-          Need Additional Help?
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 3 }}>
-          Our support team is ready to assist you with any questions or issues.
-        </Typography>
-        <Button 
-          variant="contained" 
-          size="large"
-          component={Link}
-          href="/contact"
-          sx={{ 
-            borderRadius: 2,
-            px: 4,
-            textTransform: 'none',
-            fontWeight: 'bold'
-          }}
-        >
-          Contact Support
-        </Button>
-      </Paper>
+      {/* CTA Section */}
+      <Box sx={{ py: 8, textAlign: 'center' }}>
+        <Container maxWidth="md">
+          <Typography
+            variant="h4"
+            gutterBottom
+            sx={{ fontWeight: 700 }}
+          >
+            Still Need Help?
+          </Typography>
+          <Typography
+            variant="body1"
+            paragraph
+            color="text.secondary"
+            sx={{ mb: 4, maxWidth: '600px', mx: 'auto' }}
+          >
+            Our support team is ready to assist you with any questions or issues you may have with LightningHire.
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+            <Button
+              component={Link}
+              href="/contact"
+              variant="outlined"
+              color="primary"
+              size="large"
+              sx={{ 
+                px: 3, 
+                py: 1.5,
+                fontWeight: 600,
+                borderWidth: 2,
+                '&:hover': {
+                  borderWidth: 2,
+                }
+              }}
+            >
+              Contact Support
+            </Button>
+            <Button
+              component={Link}
+              href="https://www.lightninghire.com"
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{ 
+                px: 3, 
+                py: 1.5,
+                fontWeight: 600,
+              }}
+            >
+              Back to App
+            </Button>
+          </Box>
+        </Container>
+      </Box>
     </PageLayout>
   );
 }

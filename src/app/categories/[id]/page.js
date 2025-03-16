@@ -8,9 +8,9 @@ import Link from 'next/link';
 
 export async function generateMetadata({ params }) {
   await connectToDatabase();
-  const slug = params.id;
+  const { id } = params;
   
-  const category = await ArticleCategory.findOne({ slug, isActive: true }).lean();
+  const category = await ArticleCategory.findOne({ slug: id, isActive: true }).lean();
   
   if (!category) {
     return {
@@ -26,11 +26,11 @@ export async function generateMetadata({ params }) {
 
 export default async function CategoryPage({ params }) {
   await connectToDatabase();
-  const slug = params.id;
+  const { id } = params;
   
   // Get the category
   const category = await ArticleCategory.findOne({ 
-    slug, 
+    slug: id, 
     isActive: true 
   });
   
@@ -48,7 +48,7 @@ export default async function CategoryPage({ params }) {
   .lean();
   
   return (
-    <PageLayout>
+    <PageLayout showBackgroundLogos={false}>
       <Typography variant="h3" component="h1" gutterBottom>
         {category.name}
       </Typography>

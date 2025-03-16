@@ -37,7 +37,7 @@ export default async function ArticlesIndexPage() {
   const categories = await ArticleCategory.find().sort({ name: 1 });
   
   return (
-    <PageLayout>
+    <PageLayout showBackgroundLogos={false}>
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Box mb={4}>
           <Breadcrumbs aria-label="breadcrumb">

@@ -207,7 +207,7 @@ export default function SupportPage() {
   ];
   
   return (
-    <PageLayout>
+    <PageLayout showBackgroundLogos={false}>
       <Container maxWidth="lg">
         <Box sx={{ py: 6 }}>
           <Typography 

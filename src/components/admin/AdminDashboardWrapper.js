@@ -71,7 +71,7 @@ export default function AdminDashboardWrapper({ children }) {
   );
 
   return (
-    <PageLayout disableChatbot maxWidth={false}>
+    <PageLayout disableChatbot maxWidth={false} showBackgroundLogos={false}>
       <Box sx={{ display: 'flex', width: '100%', position: 'relative' }}>
         <AppBar
           position="fixed"

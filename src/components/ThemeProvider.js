@@ -4,30 +4,30 @@
 import { createTheme, ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-// Create Lightning Hire theme matching the main application
+// Create Lightning Hire theme matching the docs site
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#FF7900', // Orange from main app
+      main: '#FF7900', // Orange from docs site
       light: '#FF9100',
       dark: '#E05600',
     },
     secondary: {
-      main: '#7B2CBF', // Purple from main app
-      light: '#9D4EDD',
-      dark: '#5A189A',
+      main: '#1A1A1A', // Black from docs site
+      light: '#333333',
+      dark: '#000000',
     },
     background: {
-      default: '#f8f9fa',
-      paper: '#ffffff',
+      default: '#FFFFFF',
+      paper: '#FFFFFF',
     },
     text: {
-      primary: '#240046', // Deep purple for text
-      secondary: '#5A189A', // Medium purple for secondary text
+      primary: '#1A1A1A', // Dark for text
+      secondary: '#555555', // Medium gray for secondary text
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontSize: '2.5rem',
       fontWeight: 700,
@@ -58,8 +58,8 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.1)',
-          backgroundColor: '#ffffff',
-          color: '#240046',
+          backgroundColor: '#FFFFFF',
+          color: '#1A1A1A',
         },
       },
     },
@@ -68,6 +68,19 @@ const theme = createTheme({
         root: {
           textTransform: 'none',
           borderRadius: 4,
+          fontWeight: 600,
+        },
+        containedPrimary: {
+          backgroundColor: '#FF7900',
+          '&:hover': {
+            backgroundColor: '#E05600',
+          },
+        },
+        containedSecondary: {
+          backgroundColor: '#7B2CBF',
+          '&:hover': {
+            backgroundColor: '#5A189A',
+          },
         },
       },
     },
