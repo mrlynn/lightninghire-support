@@ -228,9 +228,9 @@ export const chatService = {
   - Use headings with ## and ### for organization
   - Use bullet points or numbered lists where appropriate
   - Use **bold** for emphasis
-  - When linking to articles, use proper markdown format: [Article Title](/articles/article-slug)
+  - When referencing articles, DO NOT create your own links. The system will automatically add source links.
   
-  Keep your answers concise and helpful. If referencing a specific article, include a link to it.`;
+  Keep your answers concise and helpful. If referencing a specific article, mention it by name only.`;
       
       // Call OpenAI API
       const response = await openai.chat.completions.create({
@@ -249,17 +249,13 @@ export const chatService = {
       // Extract and return the assistant's message
       const aiResponse = response.choices[0].message.content;
       
-      // Add a formatted section at the end with article links if not already included
-      if (!aiResponse.includes('/articles/')) {
-        let articleLinks = '\n\n---\n**Sources:**\n';
-        relevantArticles.slice(0, 3).forEach((article) => {
-          articleLinks += `- [${article.title}](/articles/${article.slug})\n`;
-        });
-        
-        return aiResponse + articleLinks;
-      }
+      // Always add a formatted section at the end with article links
+      let articleLinks = '\n\n---\n**Sources:**\n';
+      relevantArticles.slice(0, 3).forEach((article) => {
+        articleLinks += `- [${article.title}](/articles/${article.slug})\n`;
+      });
       
-      return aiResponse;
+      return aiResponse + articleLinks;
     } catch (error) {
       console.error('Error generating AI response:', error);
       return "I'm sorry, I encountered an error while generating a response. Please try again later.";

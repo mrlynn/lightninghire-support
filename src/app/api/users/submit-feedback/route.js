@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { connectToDatabase } from '@/lib/mongoose';
+import mongoose from 'mongoose';
 
 // Import User model
 let User;
@@ -11,14 +12,18 @@ try {
   console.warn('User model not found in current app, will try to use User from shared database');
 }
 
-// Import Feedback model if you have one
+// Import Feedback model
 let Feedback;
 try {
   Feedback = require('@/models/Feedback').default;
 } catch (error) {
-  // We'll handle this in the POST function below
+  console.warn('Feedback model not found, will create schema dynamically');
 }
 
+/**
+ * POST /api/users/submit-feedback
+ * Handles user feedback submissions for various items in the support portal
+ */
 export async function POST(request) {
   try {
     // Get current session
@@ -27,7 +32,7 @@ export async function POST(request) {
     // Check if user is authenticated
     if (!session || !session.user?.id) {
       return NextResponse.json(
-        { message: 'Unauthorized. Authentication required.' },
+        { error: 'Unauthorized. Authentication required.' },
         { status: 401 }
       );
     }
@@ -37,7 +42,7 @@ export async function POST(request) {
     
     if (!itemId || !itemType || rating === undefined) {
       return NextResponse.json(
-        { message: 'Item ID, type, and rating are required' },
+        { error: 'Item ID, type, and rating are required' },
         { status: 400 }
       );
     }
@@ -46,77 +51,104 @@ export async function POST(request) {
     await connectToDatabase();
     
     // If we couldn't import User model, try to get it from the mongoose models
-    const mongoose = await import('mongoose');
     if (!User) {
       User = mongoose.models.User || mongoose.model('User', new mongoose.Schema({}));
     }
     
     // Find user
-    const user = await User.findById(session.user.id);
+    const userId = session.user.id;
+    const user = await User.findById(userId);
     
     if (!user) {
       return NextResponse.json(
-        { message: 'User not found' },
+        { error: 'User not found' },
         { status: 404 }
       );
     }
     
     // Create Feedback model if it doesn't exist
     if (!Feedback) {
-      const FeedbackSchema = new mongoose.Schema({
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        itemId: { type: String, required: true },
-        itemType: { type: String, required: true },
-        rating: { type: Number, required: true, min: 1, max: 5 },
-        comments: { type: String },
-        createdAt: { type: Date, default: Date.now }
-      });
+      const feedbackSchema = new mongoose.Schema(
+        {
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: [true, 'User ID is required']
+          },
+          itemId: {
+            type: String,
+            required: [true, 'Item ID is required']
+          },
+          itemType: {
+            type: String,
+            enum: ['article', 'ticket', 'feature', 'support'],
+            required: [true, 'Item type is required']
+          },
+          rating: {
+            type: Number,
+            min: 1,
+            max: 5,
+            required: [true, 'Rating is required']
+          },
+          comments: {
+            type: String,
+            default: ''
+          },
+          helpful: {
+            type: Boolean,
+            default: null
+          }
+        },
+        {
+          timestamps: true
+        }
+      );
       
-      Feedback = mongoose.models.Feedback || mongoose.model('Feedback', FeedbackSchema);
+      // Create compound index for preventing duplicate feedback
+      feedbackSchema.index({ userId: 1, itemId: 1, itemType: 1 }, { unique: true });
+      
+      Feedback = mongoose.model('Feedback', feedbackSchema);
     }
     
-    // Create new feedback entry
-    const newFeedback = new Feedback({
-      userId: user._id,
+    // Create or update feedback
+    const feedbackData = {
+      userId: userId,
       itemId,
       itemType,
       rating,
-      comments,
-      createdAt: new Date()
-    });
+      comments: comments || '',
+      helpful: rating >= 4 // Consider ratings 4-5 as helpful
+    };
     
-    await newFeedback.save();
+    // Use findOneAndUpdate with upsert to create or update feedback
+    await Feedback.findOneAndUpdate(
+      { userId, itemId, itemType },
+      feedbackData,
+      { upsert: true, new: true }
+    );
     
     // Update user's feedback count
-    if (!user.supportStats) {
-      user.supportStats = { feedbackGiven: 0 };
-    }
-    
-    user.supportStats.feedbackGiven = (user.supportStats.feedbackGiven || 0) + 1;
-    user.lastSupportActivity = new Date();
-    
-    // If this is article feedback, update the article view record
-    if (itemType === 'article' && user.supportActivity?.articleViews) {
-      const articleView = user.supportActivity.articleViews.find(
-        view => view.articleId.toString() === itemId
-      );
-      
-      if (articleView) {
-        articleView.helpful = rating >= 4; // Consider ratings of 4 or 5 as helpful
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        lastSupportActivity: new Date(),
+        $inc: { 'supportStats.feedbackGiven': 1 }
       }
+    );
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    // Handle duplicate key error separately
+    if (error.code === 11000) {
+      return NextResponse.json(
+        { error: 'You have already provided feedback for this item' },
+        { status: 409 }
+      );
     }
     
-    await user.save();
-    
-    return NextResponse.json({
-      message: 'Feedback submitted successfully',
-      feedbackId: newFeedback._id
-    });
-    
-  } catch (error) {
     console.error('Error submitting feedback:', error);
     return NextResponse.json(
-      { message: 'An error occurred while submitting feedback' },
+      { error: 'An error occurred while submitting feedback' },
       { status: 500 }
     );
   }

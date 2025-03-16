@@ -6,7 +6,9 @@ import ChatMessage from '@/models/ChatMessage';
 
 export async function GET(req, { params }) {
   try {
-    const { id } = params;
+    // Await params before accessing properties
+    const paramsObj = await Promise.resolve(params);
+    const id = paramsObj.id;
     
     await connectToDatabase();
     
@@ -62,7 +64,9 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   try {
-    const { id } = params;
+    // Await params before accessing properties
+    const paramsObj = await Promise.resolve(params);
+    const id = paramsObj.id;
     const data = await req.json();
     
     await connectToDatabase();
@@ -123,7 +127,9 @@ export async function PUT(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
-    const { id } = params;
+    // Await params before accessing properties
+    const paramsObj = await Promise.resolve(params);
+    const id = paramsObj.id;
     
     await connectToDatabase();
     

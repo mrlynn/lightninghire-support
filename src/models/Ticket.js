@@ -34,6 +34,16 @@ const ticketSchema = new Schema(
       ref: 'User',
       required: [true, 'Requestor is required']
     },
+    // Store contact information separately for quick access and historical purposes
+    contactInfo: {
+      name: String,
+      email: {
+        type: String,
+        required: [true, 'Contact email is required']
+      },
+      role: String,
+      auth_provider: String
+    },
     assignee: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -49,6 +59,11 @@ const ticketSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: 'User',
           required: [true, 'Comment creator is required']
+        },
+        authorInfo: {
+          name: String,
+          email: String,
+          role: String
         },
         isInternal: {
           type: Boolean,
@@ -70,6 +85,10 @@ const ticketSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: 'User'
         },
+        uploaderInfo: {
+          name: String,
+          email: String
+        },
         uploadedAt: {
           type: Date,
           default: Date.now
@@ -84,6 +103,18 @@ const ticketSchema = new Schema(
     resolutionSummary: {
       type: String,
       default: ''
+    },
+    // Track creation source for analytics
+    creationSource: {
+      type: String,
+      enum: ['web', 'email', 'api', 'admin'],
+      default: 'web'
+    },
+    // Store session ID for tracking purposes
+    sessionData: {
+      browser: String,
+      os: String,
+      device: String
     }
   },
   {

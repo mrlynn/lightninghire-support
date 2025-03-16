@@ -20,6 +20,9 @@ const UserSchema = new Schema({
     enum: ['user', 'support_agent', 'admin'], 
     default: 'user' 
   },
+  permissions: [String],
+  organization: { type: String },
+  preferredLanguage: { type: String, default: 'en' },
   supportPreferences: {
     emailNotifications: { type: Boolean, default: true },
     notificationFrequency: { 
@@ -30,13 +33,15 @@ const UserSchema = new Schema({
   },
   lastSupportActivity: { type: Date },
   supportStats: {
-    articlesRead: { type: Number, default: 0 },
-    feedbackGiven: { type: Number, default: 0 },
-    ticketsCreated: { type: Number, default: 0 }
+    articlesViewed: { type: Number, default: 0 },
+    searchesPerformed: { type: Number, default: 0 },
+    ticketsCreated: { type: Number, default: 0 },
+    ticketsResolved: { type: Number, default: 0 },
+    feedbackGiven: { type: Number, default: 0 }
   },
   // Enhanced support activity tracking
   supportActivity: {
-    searchHistory: [{ 
+    searches: [{ 
       query: String, 
       timestamp: { type: Date, default: Date.now },
       resultsCount: Number
@@ -44,16 +49,18 @@ const UserSchema = new Schema({
     articleViews: [{ 
       articleId: { type: Schema.Types.ObjectId, ref: 'Article' }, 
       title: String,
-      timestamp: { type: Date, default: Date.now },
-      timeSpent: Number, // in seconds
+      viewCount: { type: Number, default: 1 },
+      firstViewed: { type: Date, default: Date.now },
+      lastViewed: { type: Date, default: Date.now },
+      totalTimeSpent: { type: Number, default: 0 }, // in seconds
       helpful: Boolean // whether user marked article as helpful
     }],
-    supportTickets: [{ 
+    tickets: [{ 
       ticketId: { type: Schema.Types.ObjectId, ref: 'Ticket' }, 
       title: String,
       status: String,
-      timestamp: { type: Date, default: Date.now },
-      resolved: Boolean,
+      createdAt: { type: Date, default: Date.now },
+      resolvedAt: Date,
       satisfactionRating: Number // 1-5 scale
     }]
   },
@@ -75,9 +82,23 @@ const UserSchema = new Schema({
       lastFeatureUsed: String
     }
   },
+  refreshToken: { type: String },
   isAdmin: { type: Boolean, default: false },
   created_at: { type: Date, default: Date.now },
   last_login: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
+
+// Create indexes for better performance
+UserSchema.index({ email: 1 });
+UserSchema.index({ username: 1 });
+UserSchema.index({ auth_provider: 1 });
+UserSchema.index({ 'supportActivity.articleViews.articleId': 1 });
+UserSchema.index({ 'supportActivity.tickets.ticketId': 1 });
+
+// Add a static method to find user by provider ID
+UserSchema.statics.findByProvider = async function(provider, providerId) {
+  const query = { [`${provider}Id`]: providerId };
+  return this.findOne(query);
+};
 
 export default mongoose.models.User || mongoose.model('User', UserSchema);

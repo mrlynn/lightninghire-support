@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { connectToDatabase } from '@/lib/mongoose';
+import mongoose from 'mongoose';
 
 // Import User model
 let User;
@@ -11,6 +12,10 @@ try {
   console.warn('User model not found in current app, will try to use User from shared database');
 }
 
+/**
+ * POST /api/users/track-activity
+ * Tracks various user activities in the support portal
+ */
 export async function POST(request) {
   try {
     // Get current session
@@ -19,7 +24,7 @@ export async function POST(request) {
     // Check if user is authenticated
     if (!session || !session.user?.id) {
       return NextResponse.json(
-        { message: 'Unauthorized. Authentication required.' },
+        { error: 'Unauthorized. Authentication required.' },
         { status: 401 }
       );
     }
@@ -29,7 +34,7 @@ export async function POST(request) {
     
     if (!type || !data) {
       return NextResponse.json(
-        { message: 'Activity type and data are required' },
+        { error: 'Activity type and data are required' },
         { status: 400 }
       );
     }
@@ -38,110 +43,156 @@ export async function POST(request) {
     await connectToDatabase();
     
     // If we couldn't import User model, try to get it from the mongoose models
-    const mongoose = await import('mongoose');
     if (!User) {
       User = mongoose.models.User || mongoose.model('User', new mongoose.Schema({}));
     }
     
     // Find user
-    const user = await User.findById(session.user.id);
+    const userId = session.user.id;
+    const user = await User.findById(userId);
     
     if (!user) {
       return NextResponse.json(
-        { message: 'User not found' },
+        { error: 'User not found' },
         { status: 404 }
       );
     }
     
-    // Initialize supportActivity if it doesn't exist
-    if (!user.supportActivity) {
-      user.supportActivity = {
-        searchHistory: [],
-        articleViews: [],
-        supportTickets: []
+    // Initialize support stats if not already present
+    if (!user.supportStats) {
+      user.supportStats = {
+        articlesViewed: 0,
+        searchesPerformed: 0,
+        ticketsCreated: 0,
+        ticketsResolved: 0,
+        feedbackGiven: 0
       };
     }
     
-    // Update user activity based on type
+    // Initialize support activity if not already present
+    if (!user.supportActivity) {
+      user.supportActivity = {
+        articleViews: [],
+        searches: [],
+        tickets: []
+      };
+    }
+    
+    // Prepare update operations based on activity type
+    const updateOperations = {
+      lastSupportActivity: new Date()
+    };
+    
+    // Handle different activity types
     switch (type) {
-      case 'articleView':
-        // Add article view
-        user.supportActivity.articleViews.push({
-          articleId: data.articleId,
-          title: data.title,
-          timestamp: new Date(),
-          timeSpent: data.timeSpent || 0,
-          helpful: data.helpful
-        });
+      case 'articleView': {
+        const { articleId, title, timeSpent, helpful } = data;
         
-        // Update knowledge profile with interests based on article tags
-        if (data.tags && Array.isArray(data.tags)) {
-          if (!user.knowledgeProfile) {
-            user.knowledgeProfile = { interests: [] };
-          }
+        if (!articleId) {
+          return NextResponse.json(
+            { error: 'Article ID is required for article view tracking' },
+            { status: 400 }
+          );
+        }
+        
+        // Check if this article has been viewed before
+        const existingView = user.supportActivity.articleViews.find(
+          view => view.articleId.toString() === articleId.toString()
+        );
+        
+        if (existingView) {
+          // Update existing view
+          existingView.viewCount += 1;
+          existingView.lastViewed = new Date();
+          existingView.totalTimeSpent = (existingView.totalTimeSpent || 0) + (timeSpent || 0);
           
-          // Add unique tags to interests
-          data.tags.forEach(tag => {
-            if (!user.knowledgeProfile.interests.includes(tag)) {
-              user.knowledgeProfile.interests.push(tag);
-            }
+          // Only update helpful status if it was provided
+          if (helpful !== null && helpful !== undefined) {
+            existingView.helpful = helpful;
+          }
+        } else {
+          // Add new article view
+          user.supportActivity.articleViews.push({
+            articleId,
+            title: title || 'Unknown Article',
+            viewCount: 1,
+            firstViewed: new Date(),
+            lastViewed: new Date(),
+            totalTimeSpent: timeSpent || 0,
+            helpful
           });
+          
+          // Increment articles viewed count
+          user.supportStats.articlesViewed = (user.supportStats.articlesViewed || 0) + 1;
         }
-        
-        // Increment articles read count
-        if (!user.supportStats) {
-          user.supportStats = { articlesRead: 0 };
-        }
-        user.supportStats.articlesRead = (user.supportStats.articlesRead || 0) + 1;
         break;
+      }
+      
+      case 'search': {
+        const { query, resultsCount } = data;
         
-      case 'search':
+        if (!query) {
+          return NextResponse.json(
+            { error: 'Search query is required for search tracking' },
+            { status: 400 }
+          );
+        }
+        
         // Add search to history
-        user.supportActivity.searchHistory.push({
-          query: data.query,
-          timestamp: new Date(),
-          resultsCount: data.resultsCount || 0
+        user.supportActivity.searches.push({
+          query,
+          resultsCount: resultsCount || 0,
+          timestamp: new Date()
         });
-        break;
         
-      case 'ticketCreation':
+        // Maintain reasonable size of search history (keep last 50)
+        if (user.supportActivity.searches.length > 50) {
+          user.supportActivity.searches = user.supportActivity.searches.slice(-50);
+        }
+        
+        // Increment searches performed count
+        user.supportStats.searchesPerformed = (user.supportStats.searchesPerformed || 0) + 1;
+        break;
+      }
+      
+      case 'ticketCreation': {
+        const { ticketId, title } = data;
+        
+        if (!ticketId) {
+          return NextResponse.json(
+            { error: 'Ticket ID is required for ticket creation tracking' },
+            { status: 400 }
+          );
+        }
+        
         // Add ticket to history
-        user.supportActivity.supportTickets.push({
-          ticketId: data.ticketId,
-          title: data.title,
-          status: 'open',
-          timestamp: new Date(),
-          resolved: false
+        user.supportActivity.tickets.push({
+          ticketId,
+          title: title || 'Unknown Ticket',
+          createdAt: new Date(),
+          status: 'open'
         });
         
         // Increment tickets created count
-        if (!user.supportStats) {
-          user.supportStats = { ticketsCreated: 0 };
-        }
         user.supportStats.ticketsCreated = (user.supportStats.ticketsCreated || 0) + 1;
         break;
-        
+      }
+      
       default:
         return NextResponse.json(
-          { message: 'Invalid activity type' },
+          { error: `Unsupported activity type: ${type}` },
           { status: 400 }
         );
     }
     
-    // Update last support activity timestamp
-    user.lastSupportActivity = new Date();
-    
-    // Save user
+    // Save user with updated activity
     await user.save();
     
-    return NextResponse.json({
-      message: 'Activity tracked successfully'
-    });
-    
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error tracking user activity:', error);
     return NextResponse.json(
-      { message: 'An error occurred while tracking activity' },
+      { error: 'An error occurred while tracking user activity' },
       { status: 500 }
     );
   }

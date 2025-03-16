@@ -38,6 +38,10 @@ export async function POST(request, { params }) {
       fileType: fileInfo.fileType,
       fileUrl: fileInfo.fileUrl,
       uploadedBy: session.user.id,
+      uploaderInfo: {
+        name: session.user.name,
+        email: session.user.email
+      },
       uploadedAt: new Date()
     };
     

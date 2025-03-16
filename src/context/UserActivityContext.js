@@ -27,7 +27,7 @@ export function UserActivityProvider({ children }) {
       if (status === 'authenticated' && session?.user?.id) {
         try {
           setIsLoading(true);
-          const response = await fetch(`/api/users/${session.user.id}/profile`);
+          const response = await fetch('/api/users/profile');
           
           if (!response.ok) {
             throw new Error('Failed to fetch user profile');

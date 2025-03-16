@@ -1,310 +1,365 @@
 // src/app/page.js
 'use client';
 
-import { useState, useEffect } from 'react';
-import PageLayout from '@/components/layout/PageLayout';
-import ChatButton from '@/components/support/ChatButton';
-import { 
-  Box, 
-  Typography, 
-  Grid, 
-  Card, 
-  CardContent, 
-  TextField, 
-  InputAdornment, 
-  Paper, 
-  Container, 
-  Button, 
-  Divider,
-  CardActionArea,
-  CardMedia,
-  Stack,
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useUserActivity } from '@/context/UserActivityContext';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Button,
+  Card,
+  CardContent,
   CardActions,
-  CircularProgress
+  Paper,
+  Divider,
+  Chip,
 } from '@mui/material';
-import { 
-  Search as SearchIcon, 
-  Article as ArticleIcon, 
-  Category as CategoryIcon,
-  LiveHelp as LiveHelpIcon,
-  SupportAgent as SupportAgentIcon,
-  ContactSupport as ContactSupportIcon,
-  School as SchoolIcon,
-  Help as HelpIcon,
-  Lightbulb as LightbulbIcon
+import {
+  Article as ArticleIcon,
+  QuestionAnswer as QuestionIcon,
+  PersonOutline as PersonIcon,
+  Search as SearchIcon,
+  SupportAgent as SupportIcon,
 } from '@mui/icons-material';
 import Link from 'next/link';
-import AnimatedHero from '@/components/ui/AnimatedHero';
-import HomepageFeatures from '@/components/ui/HomepageFeatures';
+import PageLayout from '@/components/layout/PageLayout';
 
-// Quick link cards for the homepage
-const quickLinks = [
-  {
-    title: 'Knowledge Base',
-    description: 'Browse our comprehensive knowledge base articles to find answers to common questions.',
-    icon: ArticleIcon,
-    href: '/articles',
-  },
-  {
-    title: 'Live Support',
-    description: 'Chat with our support team for immediate assistance with your questions.',
-    icon: SupportAgentIcon,
-    href: '/chat',
-  },
-  {
-    title: 'Submit a Ticket',
-    description: 'Create a support ticket for more complex issues that require detailed assistance.',
-    icon: ContactSupportIcon,
-    href: '/tickets/new',
-  },
-];
-
-export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [popularArticles, setPopularArticles] = useState([]);
-  const [recentArticles, setRecentArticles] = useState([]);
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    // We'd fetch data here in a real app
-    // For now, just simulate the data being loaded
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    
-    return () => clearTimeout(timer);
-  }, []);
+export default function HomePage() {
+  const { data: session } = useSession();
+  const { userProfile, isLoading } = useUserActivity();
+  
+  // Featured support topics
+  const featuredTopics = [
+    { title: 'Getting Started', icon: ArticleIcon, url: '/articles/getting-started' },
+    { title: 'Account Management', icon: PersonIcon, url: '/articles/account' },
+    { title: 'Billing & Subscription', icon: ArticleIcon, url: '/articles/billing' },
+    { title: 'Common Issues', icon: QuestionIcon, url: '/articles/common-issues' },
+  ];
   
   return (
-    <PageLayout showBackgroundLogos={false}>
-      {/* Animated Hero Section */}
-      <AnimatedHero 
-        title="LightningHire Support"
-        subtitle="We're here to help you get the most out of your AI-powered resume evaluation system"
-        ctaText="Browse Knowledge Base"
-        ctaLink="/articles"
-        logoCount={9}
-        backgroundOpacity={0.07}
-      />
-      
-      {/* Quick Links Section */}
-      <Box sx={{ py: 8, backgroundColor: 'rgba(0, 0, 0, 0.02)' }}>
-        <Container maxWidth="lg">
-          <Typography
-            component="h2"
-            variant="h4"
-            align="center"
-            color="text.primary"
+    <PageLayout>
+      <Container maxWidth="lg">
+        {/* Hero section */}
+        <Box 
+          sx={{ 
+            py: { xs: 4, md: 8 },
+            textAlign: 'center', 
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          <Typography 
+            variant="h2" 
+            component="h1" 
             gutterBottom
-            sx={{ mb: 6, fontWeight: 700 }}
+            sx={{ 
+              fontWeight: 700,
+              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              backgroundImage: 'linear-gradient(45deg, #FF7900, #FFD600)',
+              backgroundClip: 'text',
+              color: 'transparent',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              mb: 2
+            }}
           >
-            Support Options
+            Lightning Hire Support
           </Typography>
           
-          <Grid container spacing={4} justifyContent="center">
-            {quickLinks.map((link, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
+          <Typography 
+            variant="h6"
+            color="text.secondary"
+            sx={{ 
+              maxWidth: '700px', 
+              mx: 'auto', 
+              mb: 5,
+              fontSize: { xs: '1rem', md: '1.25rem' },
+            }}
+          >
+            Get the help you need to maximize your recruitment efficiency with our powerful AI-driven tools.
+          </Typography>
+          
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
+            <Button 
+              component={Link}
+              href="/tickets/new"
+              variant="contained" 
+              size="large"
+              startIcon={<SupportIcon />}
+              sx={{ 
+                py: 1.5,
+                px: 4,
+                fontWeight: 600,
+                borderRadius: 2,
+              }}
+            >
+              Create Support Ticket
+            </Button>
+            
+            <Button 
+              component={Link}
+              href="/articles"
+              variant="outlined" 
+              size="large"
+              startIcon={<ArticleIcon />}
+              sx={{ 
+                py: 1.5,
+                px: 4,
+                fontWeight: 600,
+                borderRadius: 2,
+              }}
+            >
+              Browse Knowledge Base
+            </Button>
+          </Box>
+        </Box>
+        
+        <Divider sx={{ my: 4 }} />
+        
+        {/* Personalized welcome section for authenticated users */}
+        {session && (
+          <Paper
+            elevation={0}
+            sx={{ 
+              p: 4, 
+              mb: 6, 
+              borderRadius: 2,
+              backgroundColor: 'primary.light',
+              color: 'primary.contrastText'
+            }}
+          >
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} md={7}>
+                <Typography variant="h4" gutterBottom>
+                  Welcome back, {session.user.name.split(' ')[0]}!
+                </Typography>
+                
+                <Typography variant="body1" sx={{ mb: 3, opacity: 0.9 }}>
+                  {userProfile && userProfile.supportStats?.ticketsCreated > 0 ? (
+                    `You have ${userProfile.supportStats.ticketsCreated} support ticket${userProfile.supportStats.ticketsCreated > 1 ? 's' : ''} in our system. Our team is here to help you get the most out of Lightning Hire.`
+                  ) : (
+                    "Need help with anything? Our support team is ready to assist you with any questions you might have."
+                  )}
+                </Typography>
+                
+                <Button 
+                  component={Link}
+                  href="/profile"
+                  variant="contained" 
+                  color="secondary"
+                  startIcon={<PersonIcon />}
+                >
+                  View Profile & Activity
+                </Button>
+              </Grid>
+              
+              {userProfile && (
+                <Grid item xs={12} md={5}>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: { xs: 'center', md: 'flex-end' } }}>
+                    <Chip 
+                      icon={<ArticleIcon />} 
+                      label={`${userProfile.supportStats?.articlesViewed || 0} Articles Viewed`} 
+                      color="default" 
+                      sx={{ backgroundColor: 'rgba(255,255,255,0.15)', color: 'inherit' }}
+                    />
+                    <Chip 
+                      icon={<QuestionIcon />} 
+                      label={`${userProfile.supportStats?.ticketsCreated || 0} Tickets Created`} 
+                      color="default"
+                      sx={{ backgroundColor: 'rgba(255,255,255,0.15)', color: 'inherit' }}
+                    />
+                    <Chip 
+                      icon={<SearchIcon />} 
+                      label={`${userProfile.supportStats?.searchesPerformed || 0} Searches`} 
+                      color="default"
+                      sx={{ backgroundColor: 'rgba(255,255,255,0.15)', color: 'inherit' }}
+                    />
+                  </Box>
+                </Grid>
+              )}
+            </Grid>
+          </Paper>
+        )}
+        
+        {/* Featured topics section */}
+        <Box sx={{ mb: 6 }}>
+          <Typography 
+            variant="h4" 
+            component="h2" 
+            gutterBottom
+            sx={{ 
+              fontWeight: 600,
+              textAlign: 'center',
+              mb: 4
+            }}
+          >
+            Featured Support Topics
+          </Typography>
+          
+          <Grid container spacing={3}>
+            {featuredTopics.map((topic, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card 
-                  sx={{
+                  component={Link} 
+                  href={topic.url}
+                  sx={{ 
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    borderRadius: 3,
-                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    textDecoration: 'none',
+                    color: 'inherit',
                     '&:hover': {
-                      transform: 'translateY(-5px)',
-                      boxShadow: '0 8px 20px rgba(0, 0, 0, 0.1)',
-                    },
+                      transform: 'translateY(-4px)',
+                      boxShadow: 4,
+                    }
                   }}
                 >
-                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
                     <Box 
                       sx={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        mb: 2 
+                        mb: 2,
+                        width: 60,
+                        height: 60,
+                        borderRadius: '50%',
+                        backgroundColor: 'primary.light',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        mx: 'auto'
                       }}
                     >
-                      <Box
-                        sx={{
-                          p: 1.5,
-                          borderRadius: 2,
-                          backgroundColor: 'primary.main',
-                          color: 'white',
-                          display: 'inline-flex',
-                          mr: 2
-                        }}
-                      >
-                        <link.icon />
-                      </Box>
-                      <Typography variant="h5" component="h3" fontWeight={600}>
-                        {link.title}
-                      </Typography>
+                      <topic.icon fontSize="large" color="primary" />
                     </Box>
-                    <Typography variant="body1" color="text.secondary">
-                      {link.description}
+                    <Typography variant="h6" component="h3" gutterBottom>
+                      {topic.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Browse articles and guides about {topic.title.toLowerCase()}.
                     </Typography>
                   </CardContent>
-                  <CardActions sx={{ p: 3, pt: 0 }}>
-                    <Button 
-                      component={Link} 
-                      href={link.href}
-                      sx={{ 
-                        fontWeight: 600,
-                        '&:hover': { 
-                          backgroundColor: 'rgba(255, 121, 0, 0.08)' 
-                        }
-                      }}
-                    >
-                      {index === 0 ? 'Browse Articles →' : index === 1 ? 'Start Chat →' : 'Submit Ticket →'}
+                  <CardActions sx={{ justifyContent: 'center', pb: 2 }}>
+                    <Button size="small" color="primary">
+                      Learn More
                     </Button>
                   </CardActions>
                 </Card>
               </Grid>
             ))}
           </Grid>
-        </Container>
-      </Box>
-      
-      {/* Features Section */}
-      <HomepageFeatures />
-      
-      {/* FAQ Section */}
-      <Box sx={{ py: 8, backgroundColor: 'rgba(0, 0, 0, 0.02)' }}>
-        <Container maxWidth="lg">
-          <Typography
-            variant="h4"
-            align="center"
+        </Box>
+        
+        {/* Help options */}
+        <Box sx={{ mb: 6 }}>
+          <Typography 
+            variant="h4" 
+            component="h2" 
             gutterBottom
-            sx={{ mb: 6, fontWeight: 700 }}
+            sx={{ 
+              fontWeight: 600,
+              textAlign: 'center',
+              mb: 4
+            }}
           >
-            Frequently Asked Questions
+            Need More Help?
           </Typography>
           
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-                  How do I upload resumes for evaluation?
-                </Typography>
-                <Typography variant="body1">
-                  You can upload resumes individually or in bulk through the "Resumes" tab in your dashboard. 
-                  Our system accepts PDF, Word (.docx), and text (.txt) formats.
-                </Typography>
-              </Paper>
+              <Card sx={{ height: '100%' }}>
+                <CardContent>
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      flexDirection: { xs: 'column', sm: 'row' },
+                      alignItems: 'center',
+                      gap: 3
+                    }}
+                  >
+                    <Box 
+                      sx={{ 
+                        width: 70,
+                        height: 70,
+                        borderRadius: '50%',
+                        backgroundColor: 'info.light',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <SupportIcon fontSize="large" color="info" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h5" component="h3" gutterBottom>
+                        Submit a Support Ticket
+                      </Typography>
+                      <Typography variant="body1" paragraph>
+                        Our support team typically responds within 24 hours to help with your specific questions.
+                      </Typography>
+                      <Button 
+                        component={Link}
+                        href="/tickets/new"
+                        variant="contained" 
+                        color="info"
+                      >
+                        Create Ticket
+                      </Button>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
             </Grid>
             
             <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-                  Can I customize the evaluation criteria?
-                </Typography>
-                <Typography variant="body1">
-                  Yes! You can create custom evaluation templates with specific skills, 
-                  experience levels, and other requirements from the "Settings" menu.
-                </Typography>
-              </Paper>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-                  How accurate is the AI evaluation?
-                </Typography>
-                <Typography variant="body1">
-                  Our AI has been trained on millions of resumes and achieves over 95% accuracy 
-                  in identifying relevant skills and experience compared to human recruiters.
-                </Typography>
-              </Paper>
-            </Grid>
-            
-            <Grid item xs={12} md={6}>
-              <Paper sx={{ p: 3, height: '100%', borderRadius: 2 }}>
-                <Typography variant="h6" gutterBottom color="primary" fontWeight={600}>
-                  How do I integrate with my ATS?
-                </Typography>
-                <Typography variant="body1">
-                  LightningHire offers pre-built integrations with popular ATS platforms. 
-                  Visit the "Integrations" section in settings to connect your existing systems.
-                </Typography>
-              </Paper>
+              <Card sx={{ height: '100%' }}>
+                <CardContent>
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      flexDirection: { xs: 'column', sm: 'row' },
+                      alignItems: 'center',
+                      gap: 3
+                    }}
+                  >
+                    <Box 
+                      sx={{ 
+                        width: 70,
+                        height: 70,
+                        borderRadius: '50%',
+                        backgroundColor: 'success.light',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <QuestionIcon fontSize="large" color="success" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h5" component="h3" gutterBottom>
+                        Frequently Asked Questions
+                      </Typography>
+                      <Typography variant="body1" paragraph>
+                        Get immediate answers to common questions about using Lightning Hire.
+                      </Typography>
+                      <Button 
+                        component={Link}
+                        href="/faqs"
+                        variant="contained" 
+                        color="success"
+                      >
+                        Browse FAQs
+                      </Button>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
-          
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Button
-              component={Link}
-              href="/categories/faq"
-              variant="outlined"
-              color="primary"
-              sx={{ 
-                fontWeight: 600,
-                borderWidth: 2,
-                '&:hover': {
-                  borderWidth: 2,
-                }
-              }}
-            >
-              View All FAQs
-            </Button>
-          </Box>
-        </Container>
-      </Box>
-      
-      {/* CTA Section */}
-      <Box sx={{ py: 8, textAlign: 'center' }}>
-        <Container maxWidth="md">
-          <Typography
-            variant="h4"
-            gutterBottom
-            sx={{ fontWeight: 700 }}
-          >
-            Still Need Help?
-          </Typography>
-          <Typography
-            variant="body1"
-            paragraph
-            color="text.secondary"
-            sx={{ mb: 4, maxWidth: '600px', mx: 'auto' }}
-          >
-            Our support team is ready to assist you with any questions or issues you may have with LightningHire.
-          </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-            <Button
-              component={Link}
-              href="/contact"
-              variant="outlined"
-              color="primary"
-              size="large"
-              sx={{ 
-                px: 3, 
-                py: 1.5,
-                fontWeight: 600,
-                borderWidth: 2,
-                '&:hover': {
-                  borderWidth: 2,
-                }
-              }}
-            >
-              Contact Support
-            </Button>
-            <Button
-              component={Link}
-              href="https://www.lightninghire.com"
-              variant="contained"
-              color="primary"
-              size="large"
-              sx={{ 
-                px: 3, 
-                py: 1.5,
-                fontWeight: 600,
-              }}
-            >
-              Back to App
-            </Button>
-          </Box>
-        </Container>
-      </Box>
+        </Box>
+      </Container>
     </PageLayout>
   );
 }

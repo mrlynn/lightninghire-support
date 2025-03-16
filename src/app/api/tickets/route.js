@@ -20,10 +20,34 @@ export async function POST(request) {
 
     const body = await request.json();
     
-    // Set requestor to current user if not specified
-    if (!body.requestor) {
-      body.requestor = session.user.id;
-    }
+    // Set requestor to current user ID
+    body.requestor = session.user.id;
+    
+    // Add extended user information to the ticket for historical reference
+    body.contactInfo = {
+      name: session.user.name,
+      email: session.user.email,
+      role: session.user.role || 'user',
+      auth_provider: session.user.auth_provider || 'unknown'
+    };
+    
+    // Try to get browser information from request headers
+    const userAgent = request.headers.get('user-agent') || '';
+    body.sessionData = {
+      browser: userAgent.indexOf('Chrome') > -1 ? 'Chrome' : 
+               userAgent.indexOf('Firefox') > -1 ? 'Firefox' : 
+               userAgent.indexOf('Safari') > -1 ? 'Safari' : 
+               userAgent.indexOf('Edge') > -1 ? 'Edge' : 'Unknown',
+      os: userAgent.indexOf('Windows') > -1 ? 'Windows' : 
+          userAgent.indexOf('Mac') > -1 ? 'Mac' : 
+          userAgent.indexOf('Linux') > -1 ? 'Linux' : 
+          userAgent.indexOf('Android') > -1 ? 'Android' : 
+          userAgent.indexOf('iOS') > -1 ? 'iOS' : 'Unknown',
+      device: userAgent.indexOf('Mobile') > -1 ? 'Mobile' : 'Desktop'
+    };
+    
+    // Record that this ticket was created via the web interface
+    body.creationSource = 'web';
     
     // Validate required fields
     if (!body.title || !body.description || !body.category) {
@@ -34,6 +58,15 @@ export async function POST(request) {
     }
     
     const ticket = await createTicket(body);
+    
+    // Update user stats if possible (increment tickets created count)
+    try {
+      const { updateUserSupportStats } = await import('@/services/userService');
+      await updateUserSupportStats(session.user.id, { ticketCreated: true });
+    } catch (statsError) {
+      // Non-critical error, just log it
+      console.warn('Could not update user support stats:', statsError);
+    }
     
     return NextResponse.json(ticket, { status: 201 });
   } catch (error) {

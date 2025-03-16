@@ -13,8 +13,10 @@ try {
 
 export async function GET(request, { params }) {
   try {
-    // Get the user ID from params
-    const userId = params.id;
+    // In Next.js App Router, params might need to be awaited in some contexts
+    // Make sure we have the params object before accessing its properties
+    const paramsObj = await Promise.resolve(params);
+    const userId = paramsObj.id;
     
     if (!userId) {
       return NextResponse.json(

@@ -17,10 +17,15 @@ export async function POST(request, { params }) {
     const ticketId = params.id;
     const body = await request.json();
     
-    // Set the creator to the current user if not specified
-    if (!body.createdBy) {
-      body.createdBy = session.user.id;
-    }
+    // Set the creator to the current user ID
+    body.createdBy = session.user.id;
+    
+    // Add author information for denormalized access and historical purposes
+    body.authorInfo = {
+      name: session.user.name,
+      email: session.user.email,
+      role: session.user.role || 'user'
+    };
     
     // Validate required fields
     if (!body.content) {
