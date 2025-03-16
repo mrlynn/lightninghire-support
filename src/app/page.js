@@ -3,6 +3,7 @@ import { connectToDatabase } from '@/lib/mongoose';
 import KnowledgeArticle from '@/models/KnowledgeArticle';
 import ArticleCategory from '@/models/ArticleCategory';
 import PageLayout from '@/components/layout/PageLayout';
+import ChatButton from '@/components/support/ChatButton';
 import { 
   Box, 
   Typography, 
@@ -19,7 +20,14 @@ import {
   CardMedia,
   Stack
 } from '@mui/material';
-import { Search as SearchIcon, Article as ArticleIcon, Category as CategoryIcon } from '@mui/icons-material';
+import { 
+  Search as SearchIcon, 
+  Article as ArticleIcon, 
+  Category as CategoryIcon,
+  LiveHelp as LiveHelpIcon,
+  SupportAgent as SupportAgentIcon,
+  ContactSupport as ContactSupportIcon
+} from '@mui/icons-material';
 import Link from 'next/link';
 
 // Make this a Server Component
@@ -65,7 +73,7 @@ export default async function Home() {
       >
         <Container maxWidth="md">
           <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-            Lightning Hire Support Center
+            LightningHire Support Center
           </Typography>
           <Typography variant="h6" sx={{ mb: 4 }}>
             Find answers, tutorials, and help for your AI-powered resume evaluation system
@@ -117,6 +125,75 @@ export default async function Home() {
           </Paper>
         </Container>
       </Box>
+
+      {/* Main Support Options */}
+      <Container maxWidth="lg">
+        <Grid container spacing={4} sx={{ mb: 6 }}>
+          <Grid item xs={12} md={4}>
+            <Card sx={{ height: '100%' }}>
+              <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                <Box sx={{ mb: 2 }}>
+                  <LiveHelpIcon color="primary" sx={{ fontSize: 50 }} />
+                </Box>
+                <Typography variant="h6" gutterBottom>
+                  Knowledge Base
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Find answers to common questions in our comprehensive knowledge base.
+                </Typography>
+                <Button
+                  variant="outlined"
+                  component={Link}
+                  href="/articles"
+                >
+                  Browse Articles
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+          
+          <Grid item xs={12} md={4}>
+            <Card sx={{ height: '100%' }}>
+              <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                <Box sx={{ mb: 2 }}>
+                  <SupportAgentIcon color="primary" sx={{ fontSize: 50 }} />
+                </Box>
+                <Typography variant="h6" gutterBottom>
+                  Live Chat
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Chat with our support agents for immediate assistance with simple questions.
+                </Typography>
+                <ChatButton />
+              </CardContent>
+            </Card>
+          </Grid>
+          
+          <Grid item xs={12} md={4}>
+            <Card sx={{ height: '100%', bgcolor: 'primary.light' }}>
+              <CardContent sx={{ textAlign: 'center', p: 3 }}>
+                <Box sx={{ mb: 2 }}>
+                  <ContactSupportIcon sx={{ fontSize: 50, color: 'white' }} />
+                </Box>
+                <Typography variant="h6" gutterBottom sx={{ color: 'white' }}>
+                  Submit a Ticket
+                </Typography>
+                <Typography variant="body2" sx={{ mb: 2, color: 'white' }}>
+                  Need more help? Submit a support ticket and we'll get back to you soon.
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  href="/support#submit-ticket"
+                >
+                  Submit Ticket
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </Container>
+     
       
       {/* Categories Section */}
       <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 3 }}>

@@ -27,10 +27,8 @@ import RelatedArticles from '@/components/knowledge-base/RelatedArticles';
 
 // Generate metadata for the page
 export async function generateMetadata({ params }) {
-    const { id } = params;
-    const slug = id;
-
     await connectToDatabase();
+    const slug = params.id;
 
     const article = await KnowledgeArticle.findOne({
         slug,
@@ -55,10 +53,9 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ArticlePage({ params }) {
-    const { id } = params;
-    const slug = id;
     await connectToDatabase();
-
+    const slug = params.id;
+    
     // Get the article
     const article = await KnowledgeArticle.findOne({
         slug,

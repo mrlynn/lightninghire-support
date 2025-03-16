@@ -7,10 +7,8 @@ import { Typography, Grid, Card, CardContent, CardActionArea } from '@mui/materi
 import Link from 'next/link';
 
 export async function generateMetadata({ params }) {
-  const { id } = params;
-  const slug = id;
-  
   await connectToDatabase();
+  const slug = params.id;
   
   const category = await ArticleCategory.findOne({ slug, isActive: true }).lean();
   
@@ -27,9 +25,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function CategoryPage({ params }) {
-  const { id } = params;
-  const slug = id;
   await connectToDatabase();
+  const slug = params.id;
   
   // Get the category
   const category = await ArticleCategory.findOne({ 

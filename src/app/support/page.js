@@ -245,7 +245,7 @@ export default function SupportPage() {
                   </Typography>
                   <Button
                     variant="outlined"
-                    href="/knowledge-base"
+                    href="/articles"
                   >
                     Browse Articles
                   </Button>
