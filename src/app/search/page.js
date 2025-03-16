@@ -1,7 +1,7 @@
 // src/app/search/page.js
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { 
   Container, 
@@ -25,7 +25,24 @@ import { useSearchTracking } from '@/hooks/useSearchTracking';
 
 const ITEMS_PER_PAGE = 10;
 
-export default function SearchPage() {
+// Loading component for Suspense fallback
+function SearchPageLoading() {
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Search Results
+        </Typography>
+      </Box>
+      <Box display="flex" justifyContent="center" my={4}>
+        <CircularProgress />
+      </Box>
+    </Container>
+  );
+}
+
+// Component that uses useSearchParams
+function SearchPageContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
   const [results, setResults] = useState([]);
@@ -207,5 +224,14 @@ export default function SearchPage() {
         </Box>
       )}
     </Container>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchPageLoading />}>
+      <SearchPageContent />
+    </Suspense>
   );
 }

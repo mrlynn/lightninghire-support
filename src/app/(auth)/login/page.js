@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Box, Button, TextField, Typography, Paper, Divider, Alert, CircularProgress } from '@mui/material';
@@ -10,7 +10,30 @@ import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import Link from 'next/link';
 
-export default function LoginPage() {
+// Loading component for Suspense fallback
+function LoginLoading() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: 2,
+        backgroundColor: '#f5f5f5',
+      }}
+    >
+      <CircularProgress size={60} />
+      <Typography variant="h6" sx={{ mt: 2 }}>
+        Loading...
+      </Typography>
+    </Box>
+  );
+}
+
+// Component that uses useSearchParams
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
@@ -168,7 +191,7 @@ export default function LoginPage() {
 
         <Box sx={{ mt: 3, textAlign: 'center' }}>
           <Typography variant="body2">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/register" style={{ textDecoration: 'none', color: 'primary.main' }}>
               Register
             </Link>
@@ -176,5 +199,14 @@ export default function LoginPage() {
         </Box>
       </Paper>
     </Box>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginLoading />}>
+      <LoginContent />
+    </Suspense>
   );
 } 

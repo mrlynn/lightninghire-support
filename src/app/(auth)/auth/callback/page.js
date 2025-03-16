@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
-export default function AuthCallbackPage() {
+// Component that uses useSearchParams hook
+function CallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
@@ -65,5 +66,36 @@ export default function AuthCallbackPage() {
         {message}
       </Typography>
     </Box>
+  );
+}
+
+// Loading component for Suspense fallback
+function LoadingCallback() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        padding: 2,
+        backgroundColor: '#f5f5f5',
+      }}
+    >
+      <CircularProgress size={60} sx={{ mb: 4 }} />
+      <Typography variant="h5" component="h1" gutterBottom>
+        Loading...
+      </Typography>
+    </Box>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={<LoadingCallback />}>
+      <CallbackContent />
+    </Suspense>
   );
 } 
